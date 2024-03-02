@@ -10,7 +10,7 @@ public class B {
       for (int i = 0; i < t; i++) {
         int n = Integer.parseInt(reader.readLine());
         System.out.flush();
-        System.out.println(minCoinsMain(n));
+        System.out.println(minCoinsTillIndex(n, 4));
       }
       reader.close();
     } catch (IOException e) {
@@ -47,22 +47,24 @@ public class B {
     return amount[n];
   }
 
-  private static int minCoinsMain(int n) {
-    int c15 = n / 15;
+  private static int minCoinsTillIndex(int n, int i) {
+    if (n <= 1) return n;
+    if (i == 0) return n;
+    if (i == 1) return (n/c[1]) + minCoinsTillIndex(n % c[1], 0);
+    if (i == 2) return (n/c[2]) + minCoinsTillIndex(n % c[2], 1);
+
+    System.out.println(String.format("for %d using %d", n, i));
+    int numTimes = n / c[i];
+    int amountLeft = n % c[i];
     int min, next;
-    min = c15 + minCoins15(n % 15);
-    for (int i = c15 - 1, j = 1; i >= 0; i--, j++) {
-      n -= 15;
-      next = j + minCoins15(n);
-      System.out.println(String.format("%d, %d, %d", n, j, next));
+    min = n;
+    amountLeft = n % c[i];
+
+    for (int j = numTimes; j >= 0; j--) {
+      next = j + minCoinsTillIndex(amountLeft, i-1);
+      amountLeft += c[i];
       min = min > next ? next : min;
     }
     return min;
-  }
-
-  private static int minCoins15(int n) {
-    if (n <= 15) return minCoins(n);
-    int c15 = n / 15;
-    return c15 + minCoins(n % 15);
   }
 }
