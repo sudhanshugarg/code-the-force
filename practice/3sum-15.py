@@ -9,8 +9,7 @@ class Solution:
         for i in range(n):
             d[nums[i]].append(i) #d each value is sorted
         
-        result = []
-        zeros = False
+        result = set()
         for i in range(n):
             for j in range(i+1, n):
                 sum2 = nums[i] + nums[j]
@@ -19,8 +18,8 @@ class Solution:
                     n2 = len(indexes)
                     for k in range(n2-1, -1, -1):
                         if indexes[k] > j:
-                            result.append([i, j, indexes[k]])
+                            result.add((nums[i], nums[j], nums[indexes[k]]))
                         else:
                             break
 
-        return result
+        return [[item[0], item[1], item[2]] for item in result]
